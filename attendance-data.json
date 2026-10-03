@@ -1,0 +1,57 @@
+{
+  "users": [
+    {
+      "id": "356239db-994c-4bd2-8ddf-9f6e04ff85d9",
+      "username": "phanny",
+      "name": "phanny",
+      "password": "5e2d7c5f07df46ec5cc514dea1961181$e7ad0f0e82cd76b2a1a35a025f6eccc186531737c5d062153cca964807e88298",
+      "role": "admin"
+    }
+  ],
+  "students": [
+    {
+      "id": "STU-001",
+      "name": "ស៊ន ដារ៉ា",
+      "className": "ថ្នាក់ទី ១០ ក",
+      "email": ""
+    },
+    {
+      "id": "STY-002",
+      "name": "មាស​ ផាន់នី",
+      "className": "ថ្នាក់ទី ១០ ក",
+      "email": ""
+    },
+    {
+      "id": "STY-003",
+      "name": "ចេវ វណ្ណ:",
+      "className": "ថ្នាក់ទី ១០ ក",
+      "email": ""
+    },
+    {
+      "id": "STY-004",
+      "name": "ខុន អាលីហ្សា",
+      "className": "ថ្នាក់ទី ១០ ក",
+      "email": ""
+    },
+    {
+      "id": "STY-005",
+      "name": "នាង សារិនវិវឌ្ឍន៍",
+      "className": "ថ្នាក់ទី ១០ ក",
+      "email": ""
+    },
+    {
+      "id": "STY-006",
+      "name": "សុខ សូលីកា",
+      "className": "ថ្នាក់ទី ១០ ក",
+      "email": ""
+    },
+    {
+      "id": "STY-007",
+      "name": "ឃុត សុភក្រ្ដា",
+      "className": "ថ្នាក់ទី ១០ ក",
+      "email": ""
+    }
+  ],
+  "attendance": [],
+  "holidays": []
+}

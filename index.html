@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="km">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#f5f7fb" />
+    <title>ClassTrack — គ្រប់គ្រងវត្តមាន</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <section id="authScreen" class="auth-screen" hidden>
+      <form id="authForm" class="auth-card">
+        <div class="brand-mark">✓</div>
+        <h1 id="authTitle">ClassTrack</h1>
+        <p id="authCaption">សូមចូលគណនីរបស់អ្នក</p>
+        <div id="setupFields" hidden>
+          <label
+            >ឈ្មោះអ្នកគ្រប់គ្រង<input
+              name="name"
+              autocomplete="name"
+              placeholder="ឈ្មោះពេញ"
+          /></label>
+        </div>
+        <label
+          >ឈ្មោះគណនី<input name="username" autocomplete="username" required
+        /></label>
+        <label
+          >ពាក្យសម្ងាត់<input
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            required
+        /></label>
+        <button class="primary-btn" id="authSubmit">ចូលប្រើ</button>
+        <div class="auth-error" id="authError"></div>
+      </form>
+    </section>
+    <aside class="sidebar">
+      <a class="brand" href="#">
+        <span class="brand-mark">✓</span>
+        <span
+          >Class<span class="brand-accent">Track</span>
+          <small>ATTENDANCE SYSTEM</small></span
+        >
+      </a>
+      <div class="side-label">ម៉ឺនុយ</div>
+      <nav>
+        <button class="nav-item active" data-page="attendance">
+          <span>▦</span> កត់វត្តមាន
+        </button>
+        <button class="nav-item" data-page="report">
+          <span>▤</span> របាយការណ៍ប្រចាំខែ
+        </button>
+        <button class="nav-item admin-only" data-page="manage">
+          <span>♙</span> គ្រប់គ្រងសិស្ស
+        </button>
+        <button class="nav-item admin-only" data-page="settings">
+          <span>⚙</span> ការកំណត់ និងថ្ងៃឈប់
+        </button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="school-avatar">ស</div>
+        <div>
+          <strong id="userName">—</strong>
+          <small id="userRole">—</small>
+          ​
+        </div>
+        <button id="logoutBtn" class="icon-btn" title="ចាកចេញ">⇥</button>
+      </div>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <div class="breadcrumb">
+          សាលារៀនគំរូ <span>/</span>
+          <b id="pageTitle">កត់វត្តមាន</b>
+        </div>
+        <div class="top-actions">
+          <span class="today-label" id="todayLabel"></span>
+          <span class="connection"><i></i> ទិន្នន័យកណ្ដាល</span>
+        </div>
+      </header>
+      <section class="welcome">
+        <div>
+          <div class="eyebrow">
+            <span class="live-dot"></span> ប្រព័ន្ធកំពុងដំណើរការ
+          </div>
+          <h1>សួស្តី <span id="helloName">លោកគ្រូ/អ្នកគ្រូ</span> 👋</h1>
+          <p>គ្រប់គ្រងវត្តមានសិស្ស និងមើលស្ថិតិប្រចាំថ្ងៃ។</p>
+        </div>
+        <div class="date-box">
+          <span>ថ្ងៃនេះ</span>
+          <strong id="dateDisplay"></strong>
+          <small id="dayDisplay"></small>
+        </div>
+      </section>
+      <section id="page-attendance" class="page">
+        <div class="stats-grid">
+          <article class="stat-card">
+            <div class="stat-top">
+              សិស្សសរុប<span class="stat-icon blue">♙</span>
+            </div>
+            <div class="stat-value" id="totalStat">0</div>
+            <div class="stat-foot">នាក់ក្នុងថ្នាក់</div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top">
+              មានវត្តមាន<span class="stat-icon green">✓</span>
+            </div>
+            <div class="stat-value" id="presentStat">0</div>
+            <div class="stat-foot">
+              <span class="good-text" id="presentPercent">0%</span> នៃសិស្សសរុប
+            </div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top">
+              អវត្តមាន<span class="stat-icon red">×</span>
+            </div>
+            <div class="stat-value" id="absentStat">0</div>
+            <div class="stat-foot">សម្រាប់កាលបរិច្ឆេទនេះ</div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top">
+              មកយឺត<span class="stat-icon amber">◷</span>
+            </div>
+            <div class="stat-value" id="lateStat">0</div>
+            <div class="stat-foot">សម្រាប់កាលបរិច្ឆេទនេះ</div>
+          </article>
+        </div>
+        <section class="panel">
+          <div class="panel-heading">
+            <div>
+              <h2>បញ្ជីវត្តមាន</h2>
+              <p>ទិន្នន័យត្រូវបានរក្សាទុកក្នុង database រួមរបស់សាលា</p>
+            </div>
+            <div class="heading-actions">
+              <label class="date-input"
+                ><span>▦</span><input type="date" id="datePicker"
+              /></label>
+            </div>
+          </div>
+          <div id="holidayBanner" class="holiday-banner" hidden></div>
+          <div class="toolbar">
+            <label class="search">
+              <span>⌕</span
+              ><input
+                id="searchInput"
+                type="search"
+                placeholder="ស្វែងរកឈ្មោះ ឬលេខសម្គាល់..."
+            /></label>
+            <div class="filters">
+              <button class="filter active" data-filter="all">
+                ទាំងអស់ <span id="allCount">0</span>
+              </button>
+              <button class="filter" data-filter="present">
+                មានវត្តមាន <span id="presentCount">0</span>
+              </button>
+              <button class="filter" data-filter="absent">
+                អវត្តមាន <span id="absentCount">0</span>
+              </button>
+              <button class="filter" data-filter="late">
+                មកយឺត <span id="lateCount">0</span>
+              </button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>សិស្ស</th>
+                  <th>លេខសម្គាល់</th>
+                  <th>ថ្នាក់</th>
+                  <th>ម៉ោងចូល</th>
+                  <th>ស្ថានភាពវត្តមាន</th>
+                </tr>
+              </thead>
+              <tbody id="studentRows"></tbody>
+            </table>
+            <div class="empty-state" id="emptyState" hidden>
+              <div>⌕</div>
+              <strong>រកមិនឃើញសិស្សទេ</strong>
+            </div>
+          </div>
+          <div class="table-footer">
+            <span id="rowCount"></span>
+            <span>រក្សាទុកដោយស្វ័យប្រវត្តិ <b class="save-dot"></b></span>
+          </div>
+        </section>
+      </section>
+      <section id="page-report" class="page" hidden>
+        <section class="panel">
+          <div class="panel-heading">
+            <div>
+              <h2>របាយការណ៍ប្រចាំខែ</h2>
+              <p>សង្ខេបចំនួនវត្តមាន អវត្តមាន និងការមកយឺតតាមសិស្ស</p>
+            </div>
+            <div class="heading-actions">
+              <input id="reportMonth" type="month" />
+              <button class="primary-btn" id="reportExport">⇩ ទាញយក CSV</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>សិស្ស</th>
+                  <th>ថ្នាក់</th>
+                  <th>មានវត្តមាន</th>
+                  <th>អវត្តមាន</th>
+                  <th>មកយឺត</th>
+                  <th>សរុបកត់ត្រា</th>
+                </tr>
+              </thead>
+              <tbody id="reportRows"></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+      <section id="page-manage" class="page" hidden>
+        <section class="panel">
+          <div class="panel-heading">
+            <div>
+              <h2>បញ្ជីសិស្ស</h2>
+              <p>បន្ថែមសិស្សម្នាក់ៗ ឬនាំចូលបញ្ជីពី CSV</p>
+            </div>
+            <div class="heading-actions">
+              <button class="outline-btn" id="templateBtn">⇩ គំរូ CSV</button>
+              <label class="outline-btn file-btn"
+                >⇧ នាំចូល CSV<input
+                  id="csvInput"
+                  type="file"
+                  accept=".csv,text/csv"
+                  hidden
+              /></label>
+              <button class="primary-btn" id="addStudentBtn">
+                ＋ បន្ថែមសិស្ស
+              </button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>លេខសម្គាល់</th>
+                  <th>ឈ្មោះសិស្ស</th>
+                  <th>ថ្នាក់</th>
+                  <th>អ៊ីមែល</th>
+                </tr>
+              </thead>
+              <tbody id="manageRows"></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+      <section id="page-settings" class="page" hidden>
+        <div class="settings-grid">
+          <section class="panel settings-panel">
+            <div class="panel-heading">
+              <div>
+                <h2>គណនី និងសិទ្ធិ</h2>
+                <p>បង្កើតគណនីគ្រូ និងអ្នកគ្រប់គ្រង</p>
+              </div>
+            </div>
+            <form id="userForm" class="settings-form">
+              <label>ឈ្មោះពេញ<input name="name" required /></label>
+              <label>ឈ្មោះគណនី<input name="username" required /></label>
+              <label
+                >ពាក្យសម្ងាត់ (យ៉ាងតិច ១០ តួអក្សរ)<input
+                  name="password"
+                  type="password"
+                  minlength="10"
+                  required
+              /></label>
+              <label
+                >សិទ្ធិ<select name="role">
+                  <option value="teacher">គ្រូ — កត់វត្តមាន</option>
+                  <option value="admin">អ្នកគ្រប់គ្រង</option>
+                </select>
+              </label>
+              <button class="primary-btn">＋ បង្កើតគណនី</button>
+              <p id="userCount" class="muted"></p>
+            </form>
+          </section>
+          <section class="panel settings-panel">
+            <div class="panel-heading">
+              <div>
+                <h2>ថ្ងៃឈប់សម្រាក</h2>
+                <p>ថ្ងៃឈប់នឹងបង្ហាញលើផ្ទាំងកត់វត្តមាន</p>
+              </div>
+            </div>
+            <form id="holidayForm" class="settings-form inline-form">
+              <label
+                >កាលបរិច្ឆេទ<input type="date" name="day" required
+              /></label>
+              <label
+                >ឈ្មោះថ្ងៃឈប់<input
+                  name="name"
+                  placeholder="ឧ. បុណ្យចូលឆ្នាំខ្មែរ"
+                  required
+              /></label>
+              <button class="primary-btn">＋ រក្សាទុកថ្ងៃឈប់</button>
+            </form>
+            <div id="holidayList" class="holiday-list"></div>
+          </section>
+          <section class="panel settings-panel backup-panel">
+            <div class="panel-heading">
+              <div>
+                <h2>បម្រុងទុក និងស្ដារទិន្នន័យ</h2>
+                <p>ទាញយក backup រួម ឬស្ដារទិន្នន័យពីឯកសារ backup</p>
+              </div>
+            </div>
+            <div class="backup-actions">
+              <button class="primary-btn" id="backupBtn">⇩ ទាញយក backup</button>
+              <label class="outline-btn file-btn"
+                >⇧ ស្ដារពីឯកសារ<input
+                  id="restoreInput"
+                  type="file"
+                  accept=".json,application/json"
+                  hidden
+              /></label>
+            </div>
+            <p class="muted">
+              ការស្ដារទិន្នន័យនឹងជំនួសបញ្ជីសិស្ស វត្តមាន និងថ្ងៃឈប់បច្ចុប្បន្ន។
+              គណនីអ្នកប្រើមិនត្រូវបានប្ដូរទេ។
+            </p>
+          </section>
+        </div>
+      </section>
+      <footer>© 2026 ClassTrack <span>•</span> ប្រព័ន្ធគ្រប់គ្រងវត្តមាន</footer>
+    </main>
+    <dialog id="studentDialog">
+      <form id="studentForm">
+        <div class="dialog-head">
+          <div>
+            <h2>បន្ថែមសិស្សថ្មី</h2>
+            <p>បំពេញព័ត៌មានដើម្បីបញ្ចូលក្នុងបញ្ជី។</p>
+          </div>
+          <button type="button" class="icon-btn close-dialog">×</button>
+        </div>
+        <label
+          >លេខសម្គាល់<input name="id" required placeholder="STU-007"
+        /></label>
+        <label>ឈ្មោះសិស្ស<input name="name" required /></label>
+        <label
+          >ថ្នាក់<input name="className" required value="ថ្នាក់ទី ១០ ក"
+        /></label>
+        <label>អ៊ីមែល (មិនចាំបាច់)<input name="email" type="email" /></label>
+        <div class="dialog-actions">
+          <button type="button" class="outline-btn close-dialog">បោះបង់</button>
+          <button class="primary-btn">＋ បន្ថែមសិស្ស</button>
+        </div>
+      </form>
+    </dialog>
+    <div class="toast" id="toast" role="status"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
